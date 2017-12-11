@@ -1,0 +1,258 @@
+#ifndef COLORING_H_
+#define COLORING_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "minisat/core/Solver.h"
+
+using namespace std;
+
+// ***************************************************************************
+// A graph class. 
+// Note that when adding an edge (n1,n2) n1 must be less or 
+// equal to n2. This is only done for simplicity and a more compact 
+// implementation.
+// ***************************************************************************
+class Graph {
+public:
+    Graph(int nNumberOfNodes) : m_nNumberOfNodes(nNumberOfNodes)
+    {
+        m_graph.resize(nNumberOfNodes);
+    }
+
+    int getNumberOfNodes() const { return m_nNumberOfNodes; }
+
+    // Not efficient for large graphs
+    vector<int> getEdgesForNode(int node) const
+    {
+        assert (node < m_nNumberOfNodes);
+        assert (node < m_graph.size());
+        return m_graph[node];
+    }
+
+    // For now allowing duplication
+    void addEdge (int n1, int n2)
+    {
+        assert (n1 < m_nNumberOfNodes &&
+                n2 < m_nNumberOfNodes);
+        assert (n1 <= n2);
+
+        // Make sure that the vector can contain the first node
+        if (m_graph.size() <= n1)
+            m_graph.resize(n1+1);
+
+        // Take care of the first node
+        m_graph[n1].push_back(n2);
+    }
+
+private:
+    int m_nNumberOfNodes;
+    // A vector of vectors to represent the adjacency list
+    // The outer vector is mapping a node (by index) to its
+    // vector which represents a container of adjacent nodes.
+    vector<vector<int> > m_graph;
+};
+
+// ***************************************************************************
+// A class modeling the k-coloring problem.
+// ***************************************************************************
+class Coloring {
+public:
+    Coloring(const Graph& g, int nNumberOfColors) :
+          m_graph(g)
+        , m_nNumberOfColors(nNumberOfColors)
+        , m_solver()
+    {
+        // Prepare the solver with the needed variables
+        int nodes = m_graph.getNumberOfNodes();
+        for (int c = 0; c < m_nNumberOfColors; c++)
+        {
+            for (int n = 0; n < nodes; n++)
+            {
+	      Minisat::Var v = m_solver.newVar();//Var k*c + n = color c has been mapped to node n
+	      //cout<<v<<" ";
+            }
+        }
+	//cout<<"\nFinished declaring variables.\n";
+    }
+
+    void addOneColorConstraints(int node) {
+        assert (node < m_graph.getNumberOfNodes());
+
+        // Add your code here
+	//first of all, make sure that the node has a color
+	//cout<<"\nIn addOneColorConstraints(node) function.\n";
+	//cout<<"\nNode value = "<<node;
+	//cout<<"\nBefore adding clauses\n";
+	Minisat::vec<Minisat::Lit> clause;
+	for (int i = 0; i < m_nNumberOfColors; i++)
+	  {
+	    //Minisat::vec<Minisat::Lit> clause;
+	    //Minisat::Var v = m_nNumberOfColors * i + node; //node of color i
+	    Minisat::Var v = i * m_graph.getNumberOfNodes() + node;
+	    //cout<<v<<" ";
+	    clause.push(Minisat::mkLit(v, false));
+	    //cout<<Minisat::mkLit(v, false);
+	    //printf('\n %c', v);
+	  }
+	//cout<<"\nAfter adding clauses\n";
+	/*
+	for (int i = 0; i < clause.size(); i++)
+	  {
+	    cout<<clause[i]<<" ";
+	  }
+	cout<<endl;
+	*/
+	m_solver.addClause(clause);
+	//for each node, make sure that only one color maps to it
+	for (int i = 0; i < m_nNumberOfColors - 1; i++)
+	  {
+	    for (int k = i + 1; k < m_nNumberOfColors; k++)
+	      {
+		//m_solver.addClause(Minisat::mkLit(m_nNumberOfColors * i + node, true), Minisat::mkLit(m_nNumberOfColors * k + node, true));
+		//cout<<"\ni = "<<i;
+		//cout<<"\nk = "<<k;
+		//cout<<"\nnode = "<<node;
+		//Minisat::Var v1 = i * m_graph.getNumberOfNodes() + node;
+		//Minisat::Var v2 = k * m_graph.getNumberOfNodes() + node;
+		//cout<<"\ni * m_graph.getNumberOfNodes() + node = "<<(i*m_graph.getNumberOfNodes() + node);
+		//cout<<"\nk * m_graph.getNumberOfNodes() + node = "<<(k*m_graph.getNumberOfNodes() + node);
+		m_solver.addClause(Minisat::mkLit(i * m_graph.getNumberOfNodes() + node, true), Minisat::mkLit(k * m_graph.getNumberOfNodes() + node, true));
+	      }
+	  }
+    }
+
+    void addEdgeColoringConstraints(int n1, int n2) {
+        assert (n1 < m_graph.getNumberOfNodes() &&
+                n2 < m_graph.getNumberOfNodes());
+        assert (n1 <= n2);
+
+        // Add your code here
+	//here, we have to ensure that nodes n1 and n2 have different colors, i.e, !v_k_n1 or !v_k_n2, anded across all k
+	for (int c = 0; c < m_nNumberOfColors; c++)
+	  {
+	    /*cout<<"\nc = "<<c;
+	    cout<<"\nn1 = "<<n1;
+	    cout<<"\nn2 = "<<n2;
+	    cout<<"\nm_graph.getNumberOfNodes() * c + n1 = "<<(c*m_graph.getNumberOfNodes() + n1);
+	    cout<<"\nm_graph.getNumberOfNodes() * c + n2 = "<<(c*m_graph.getNumberOfNodes() + n2);*/
+	    m_solver.addClause(Minisat::mkLit(m_graph.getNumberOfNodes() * c + n1, true), Minisat::mkLit(m_graph.getNumberOfNodes() * c + n2, true));
+	  }
+    }
+
+    bool isColorable()
+    {
+        // Go over all nodes
+        for (int n = 0; n < m_graph.getNumberOfNodes(); n++)
+        {
+            // Add the constraints for the node
+            addOneColorConstraints(n);
+
+            // Now add constraints for the edges
+            vector<int> edges = m_graph.getEdgesForNode(n);
+            for (int adjcent = 0; adjcent < edges.size(); adjcent++)
+            {
+                addEdgeColoringConstraints(n, edges[adjcent]);
+            }
+        }
+
+        bool bResult = m_solver.solve();
+
+	//try and write all clauses to a file
+	//ofstream myFile;
+	//myFile.open("clauses.txt");
+	/*const char* myFile;
+	myFile = "clauses.txt";
+	m_solver.toDimacs(myFile);*/
+	//myFile.close();
+
+        return bResult;
+    }
+
+    // The function gets allColoring by reference and returns
+    // all k-coloring in this vector. Note that the inner vector
+    // represents one assignment
+    void givemeAllColoring(vector<vector<Minisat::lbool> >& allColoring) {
+        // Go over all nodes
+        for (int n = 0; n < m_graph.getNumberOfNodes(); n++)
+        {
+            // Add the constraints for the node
+            addOneColorConstraints(n);
+
+            // Now add constraints for the edges
+            vector<int> edges = m_graph.getEdgesForNode(n);
+            for (int adjcent = 0; adjcent < edges.size(); adjcent++)
+            {
+                addEdgeColoringConstraints(n, edges[adjcent]);
+            }
+        }
+
+        // Add your code here
+	/*cout<<"\nJust checking the values within giveMeAllColoring()\n";
+	cout<<"\nm_solver.model.size(): "<<m_solver.model.size();
+	cout<<endl;*/
+	bool result = m_solver.solve();
+	while (result)
+	  {
+	    vector<Minisat::lbool> v;
+	    Minisat::vec<Minisat::Lit> clause;
+	    for (int i = 0; i < m_solver.model.size(); i++)
+	      {
+		//cout<<i<<" ";
+		//cout<<"m_solver.model[i] = "<<m_solver.model[i];
+		v.push_back(m_solver.model[i]);
+		if(m_solver.modelValue(i) == Minisat::l_True)
+		  {
+		    clause.push(Minisat::mkLit(i, true));
+		  }
+		else 
+		  {
+                    clause.push(Minisat::mkLit(i, false)); //yakir told me not to worry about undef variables in minisat
+		  }
+	      }
+	    //cout<<endl;
+	    //now push clause into the m_solver and v into allColoring
+	    allColoring.push_back(v);
+	    m_solver.addClause(clause);
+	    result = m_solver.solve();
+	    //result = 0;
+	  }
+
+	/*
+	cout<<"Size of allColoring vector: "<< allColoring.size();
+	cout<<endl;
+	
+	for(int i = 0; i <allColoring.size(); i++)
+	  { 
+	    for (int j = 0;j < allColoring[i].size(); j++)
+	      {
+		//cout<<allColoring[i][j];
+		printf("%d", allColoring[i][j]);
+	      }
+	    cout<<endl;
+	    cout<<i<<" size = "<<allColoring[i].size(); 
+	    cout<<endl;
+	  } 
+	*/
+    }
+
+private:
+    Minisat::Var getNodeHasColorVar(int node, int color)
+    {
+        assert (node < m_graph.getNumberOfNodes() &&
+                color < m_nNumberOfColors);
+
+        return (color * m_graph.getNumberOfNodes()) + node;
+    }
+
+private:
+    const Graph& m_graph;
+    int m_nNumberOfColors;
+
+    Minisat::Solver m_solver;
+};
+
+#endif // COLORING_H_
