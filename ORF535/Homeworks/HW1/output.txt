@@ -1,0 +1,9 @@
+fun: -853.8288499875048
+     jac: array([-0.00868988])
+ message: 'Optimization terminated successfully.'
+    nfev: 17
+     nit: 5
+    njev: 5
+  status: 0
+ success: True
+       x: array([ 0.43853626])
