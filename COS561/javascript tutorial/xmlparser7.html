@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>TRACEROUTE IPs:</h2>
+
+<button type="button" onclick="getIPtoCountry()">
+Get my IP addresses</button>
+
+<p id="demo"></p>
+
+<script>
+
+function getIPtoCountry(){
+  var xhr1 = new XMLHttpRequest();
+
+  traceroutefor = "https://www.google.com";
+  tracerouteurltoxmlapi = traceroutefor.replace("https://www.","");
+  xmlurl = "http://pro.viewdns.info/traceroute/?domain=" + tracerouteurltoxmlapi + "&apikey=2ff13b1351aad803e4a6edf5e6275d46bfbd0510&output=xml";
+  console.log(xmlurl);
+  //xhr1.open("GET", "http://pro.viewdns.info/traceroute/?domain=facebook.com&apikey=2ff13b1351aad803e4a6edf5e6275d46bfbd0510&output=xml", false);
+  xhr1.open("GET", xmlurl, false);
+  xhr1.send(null);
+  xml1 = (xhr1.responseXML);
+  console.log(xml1);
+  ips = xml1.getElementsByTagName("ip");
+  console.log(ips.length);
+
+
+  var myMap = new Map();
+
+  for (i = 0; i< ips.length; i++) {
+    txt1 = ips[i].childNodes[0].nodeValue + "--> ";
+    document.getElementById("demo").innerHTML = txt1;
+    curr_ip = ips[i].childNodes[0].nodeValue;
+    url = "http://ip-api.com/xml/" + curr_ip;
+    console.log(url);
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", url, false);
+    xhr2.send(null);
+    xml2 = (xhr2.responseXML);
+
+    console.log(xml2);
+
+    countries =  xml2.getElementsByTagName("country");
+    console.log(countries.length);
+    //tmp = countries.length;
+    //document.getElementById("demo").innerHTML = tmp;
+    if (countries.length == 0){
+        console.log("Not going in.");
+        continue;
+      }
+    else {
+      txt2 = "";
+      console.log("Right before here.")
+      for (j = 0; j < countries.length; j++) {
+        console.log("here again.");
+        console.log(countries.length);
+        console.log(countries[j].childNodes[0].nodeValue);
+        txt2 += countries[j].childNodes[0].nodeValue + "<br>"; 
+        console.log(txt2);   
+        myMap.set(ips[i].childNodes[0].nodeValue, countries[j].childNodes[0].nodeValue);
+      } //for loop of countries[j]
+
+    document.getElementById("demo").innerHTML = txt2;
+    } //else closes here when countries.length != 0
+    
+  } //for loop of ips[i]
+  
+  //now print the map contents 
+  for (var [key, value] of myMap.entries()) {
+    console.log(key + "-->" + value);
+  }
+
+} //end of the getIPtoCountry() function
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+PATTERN: 0x5204
+PING iperf.it-north.net (82.200.209.194): 56 data bytes
+64 bytes from 82.200.209.194: icmp_seq=0 ttl=50 time=189.892 ms
+64 bytes from 82.200.209.194: icmp_seq=1 ttl=50 time=179.986 ms
+64 bytes from 82.200.209.194: icmp_seq=2 ttl=50 time=189.429 ms
+64 bytes from 82.200.209.194: icmp_seq=3 ttl=50 time=188.862 ms
+64 bytes from 82.200.209.194: icmp_seq=4 ttl=50 time=178.373 ms
+64 bytes from 82.200.209.194: icmp_seq=5 ttl=50 time=179.759 ms
+64 bytes from 82.200.209.194: icmp_seq=6 ttl=50 time=178.581 ms
+64 bytes from 82.200.209.194: icmp_seq=7 ttl=50 time=181.048 ms
+64 bytes from 82.200.209.194: icmp_seq=8 ttl=50 time=180.913 ms
+64 bytes from 82.200.209.194: icmp_seq=9 ttl=50 time=180.877 ms
+64 bytes from 82.200.209.194: icmp_seq=10 ttl=50 time=179.455 ms
+64 bytes from 82.200.209.194: icmp_seq=11 ttl=50 time=179.842 ms
+64 bytes from 82.200.209.194: icmp_seq=12 ttl=50 time=178.690 ms
+64 bytes from 82.200.209.194: icmp_seq=13 ttl=50 time=180.888 ms
+64 bytes from 82.200.209.194: icmp_seq=14 ttl=50 time=179.632 ms
+64 bytes from 82.200.209.194: icmp_seq=15 ttl=50 time=249.424 ms
+64 bytes from 82.200.209.194: icmp_seq=16 ttl=50 time=179.518 ms
+64 bytes from 82.200.209.194: icmp_seq=17 ttl=50 time=181.574 ms
+64 bytes from 82.200.209.194: icmp_seq=18 ttl=50 time=180.032 ms
+64 bytes from 82.200.209.194: icmp_seq=19 ttl=50 time=182.229 ms
+64 bytes from 82.200.209.194: icmp_seq=20 ttl=50 time=184.918 ms
+64 bytes from 82.200.209.194: icmp_seq=21 ttl=50 time=183.472 ms
+64 bytes from 82.200.209.194: icmp_seq=22 ttl=50 time=180.198 ms
+64 bytes from 82.200.209.194: icmp_seq=23 ttl=50 time=180.840 ms
+64 bytes from 82.200.209.194: icmp_seq=24 ttl=50 time=184.887 ms
+64 bytes from 82.200.209.194: icmp_seq=25 ttl=50 time=179.499 ms
+64 bytes from 82.200.209.194: icmp_seq=26 ttl=50 time=180.720 ms
+64 bytes from 82.200.209.194: icmp_seq=27 ttl=50 time=178.511 ms
+64 bytes from 82.200.209.194: icmp_seq=28 ttl=50 time=180.031 ms
+64 bytes from 82.200.209.194: icmp_seq=29 ttl=50 time=248.501 ms
+
+--- iperf.it-north.net ping statistics ---
+30 packets transmitted, 30 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 178.373/186.019/249.424/17.100 ms

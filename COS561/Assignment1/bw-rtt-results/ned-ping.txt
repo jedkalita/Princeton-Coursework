@@ -1,0 +1,36 @@
+PATTERN: 0x5002
+PING speedtest.serverius.net (178.21.16.76): 56 data bytes
+64 bytes from 178.21.16.76: icmp_seq=0 ttl=57 time=83.001 ms
+64 bytes from 178.21.16.76: icmp_seq=1 ttl=57 time=83.982 ms
+64 bytes from 178.21.16.76: icmp_seq=2 ttl=57 time=83.414 ms
+64 bytes from 178.21.16.76: icmp_seq=3 ttl=57 time=85.221 ms
+64 bytes from 178.21.16.76: icmp_seq=4 ttl=57 time=83.395 ms
+64 bytes from 178.21.16.76: icmp_seq=5 ttl=57 time=83.430 ms
+64 bytes from 178.21.16.76: icmp_seq=6 ttl=57 time=83.444 ms
+64 bytes from 178.21.16.76: icmp_seq=7 ttl=57 time=82.574 ms
+64 bytes from 178.21.16.76: icmp_seq=8 ttl=57 time=124.563 ms
+64 bytes from 178.21.16.76: icmp_seq=9 ttl=57 time=82.321 ms
+64 bytes from 178.21.16.76: icmp_seq=10 ttl=57 time=83.368 ms
+64 bytes from 178.21.16.76: icmp_seq=11 ttl=57 time=82.670 ms
+64 bytes from 178.21.16.76: icmp_seq=12 ttl=57 time=83.474 ms
+64 bytes from 178.21.16.76: icmp_seq=13 ttl=57 time=83.733 ms
+64 bytes from 178.21.16.76: icmp_seq=14 ttl=57 time=84.234 ms
+64 bytes from 178.21.16.76: icmp_seq=15 ttl=57 time=83.450 ms
+64 bytes from 178.21.16.76: icmp_seq=16 ttl=57 time=83.345 ms
+64 bytes from 178.21.16.76: icmp_seq=17 ttl=57 time=82.848 ms
+64 bytes from 178.21.16.76: icmp_seq=18 ttl=57 time=83.318 ms
+64 bytes from 178.21.16.76: icmp_seq=19 ttl=57 time=83.538 ms
+64 bytes from 178.21.16.76: icmp_seq=20 ttl=57 time=83.512 ms
+64 bytes from 178.21.16.76: icmp_seq=21 ttl=57 time=83.701 ms
+64 bytes from 178.21.16.76: icmp_seq=22 ttl=57 time=83.347 ms
+64 bytes from 178.21.16.76: icmp_seq=23 ttl=57 time=83.443 ms
+64 bytes from 178.21.16.76: icmp_seq=24 ttl=57 time=83.483 ms
+64 bytes from 178.21.16.76: icmp_seq=25 ttl=57 time=85.636 ms
+64 bytes from 178.21.16.76: icmp_seq=26 ttl=57 time=82.400 ms
+64 bytes from 178.21.16.76: icmp_seq=27 ttl=57 time=82.663 ms
+64 bytes from 178.21.16.76: icmp_seq=28 ttl=57 time=82.584 ms
+64 bytes from 178.21.16.76: icmp_seq=29 ttl=57 time=82.525 ms
+
+--- speedtest.serverius.net ping statistics ---
+30 packets transmitted, 30 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 82.321/84.754/124.563/7.427 ms

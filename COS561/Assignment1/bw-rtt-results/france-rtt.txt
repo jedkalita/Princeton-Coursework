@@ -1,0 +1,36 @@
+PATTERN: 0x5204
+PING bouygues.testdebit.info (89.84.127.53): 56 data bytes
+64 bytes from 89.84.127.53: icmp_seq=0 ttl=55 time=79.770 ms
+64 bytes from 89.84.127.53: icmp_seq=1 ttl=55 time=80.406 ms
+64 bytes from 89.84.127.53: icmp_seq=2 ttl=55 time=80.560 ms
+64 bytes from 89.84.127.53: icmp_seq=3 ttl=55 time=80.564 ms
+64 bytes from 89.84.127.53: icmp_seq=4 ttl=55 time=80.582 ms
+64 bytes from 89.84.127.53: icmp_seq=5 ttl=55 time=80.514 ms
+64 bytes from 89.84.127.53: icmp_seq=6 ttl=55 time=80.698 ms
+64 bytes from 89.84.127.53: icmp_seq=7 ttl=55 time=79.644 ms
+64 bytes from 89.84.127.53: icmp_seq=8 ttl=55 time=81.070 ms
+64 bytes from 89.84.127.53: icmp_seq=9 ttl=55 time=80.394 ms
+64 bytes from 89.84.127.53: icmp_seq=10 ttl=55 time=80.550 ms
+64 bytes from 89.84.127.53: icmp_seq=11 ttl=55 time=80.514 ms
+64 bytes from 89.84.127.53: icmp_seq=12 ttl=55 time=80.517 ms
+64 bytes from 89.84.127.53: icmp_seq=13 ttl=55 time=80.761 ms
+64 bytes from 89.84.127.53: icmp_seq=14 ttl=55 time=80.776 ms
+64 bytes from 89.84.127.53: icmp_seq=15 ttl=55 time=80.478 ms
+64 bytes from 89.84.127.53: icmp_seq=16 ttl=55 time=86.696 ms
+64 bytes from 89.84.127.53: icmp_seq=17 ttl=55 time=80.453 ms
+64 bytes from 89.84.127.53: icmp_seq=18 ttl=55 time=111.127 ms
+64 bytes from 89.84.127.53: icmp_seq=19 ttl=55 time=80.679 ms
+64 bytes from 89.84.127.53: icmp_seq=20 ttl=55 time=80.561 ms
+64 bytes from 89.84.127.53: icmp_seq=21 ttl=55 time=80.553 ms
+64 bytes from 89.84.127.53: icmp_seq=22 ttl=55 time=80.437 ms
+64 bytes from 89.84.127.53: icmp_seq=23 ttl=55 time=115.688 ms
+64 bytes from 89.84.127.53: icmp_seq=24 ttl=55 time=80.393 ms
+64 bytes from 89.84.127.53: icmp_seq=25 ttl=55 time=80.593 ms
+64 bytes from 89.84.127.53: icmp_seq=26 ttl=55 time=80.623 ms
+64 bytes from 89.84.127.53: icmp_seq=27 ttl=55 time=79.598 ms
+64 bytes from 89.84.127.53: icmp_seq=28 ttl=55 time=80.544 ms
+64 bytes from 89.84.127.53: icmp_seq=29 ttl=55 time=80.454 ms
+
+--- bouygues.testdebit.info ping statistics ---
+30 packets transmitted, 30 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 79.598/82.873/115.688/8.263 ms

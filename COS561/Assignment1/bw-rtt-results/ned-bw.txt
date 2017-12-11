@@ -1,0 +1,39 @@
+Connecting to host speedtest.serverius.net, port 5002
+[  6] local 10.9.75.190 port 51093 connected to 178.21.16.76 port 5002
+[ ID] Interval           Transfer     Bandwidth
+[  6]   0.00-1.00   sec  1.05 MBytes  8.77 Mbits/sec                  
+[  6]   1.00-2.00   sec  9.70 MBytes  81.4 Mbits/sec                  
+[  6]   2.00-3.00   sec  11.3 MBytes  94.6 Mbits/sec                  
+[  6]   3.00-4.00   sec  11.4 MBytes  95.6 Mbits/sec                  
+[  6]   4.00-5.00   sec  11.5 MBytes  96.8 Mbits/sec                  
+[  6]   5.00-6.00   sec  11.8 MBytes  98.9 Mbits/sec                  
+[  6]   6.00-7.00   sec  11.9 MBytes  99.5 Mbits/sec                  
+[  6]   7.00-8.00   sec  11.8 MBytes  98.6 Mbits/sec                  
+[  6]   8.00-9.00   sec  11.8 MBytes  99.3 Mbits/sec                  
+[  6]   9.00-10.00  sec  11.7 MBytes  98.3 Mbits/sec                  
+[  6]  10.00-11.00  sec  11.3 MBytes  94.9 Mbits/sec                  
+[  6]  11.00-12.00  sec  10.9 MBytes  91.4 Mbits/sec                  
+[  6]  12.00-13.00  sec  11.3 MBytes  94.7 Mbits/sec                  
+[  6]  13.00-14.01  sec  7.88 MBytes  65.8 Mbits/sec                  
+[  6]  14.01-15.00  sec  2.80 MBytes  23.6 Mbits/sec                  
+[  6]  15.00-16.00  sec  5.19 MBytes  43.6 Mbits/sec                  
+[  6]  16.00-17.00  sec  5.72 MBytes  48.0 Mbits/sec                  
+[  6]  17.00-18.00  sec  5.89 MBytes  49.4 Mbits/sec                  
+[  6]  18.00-19.00  sec  6.03 MBytes  50.6 Mbits/sec                  
+[  6]  19.00-20.00  sec  6.04 MBytes  50.7 Mbits/sec                  
+[  6]  20.00-21.00  sec  6.10 MBytes  51.2 Mbits/sec                  
+[  6]  21.00-22.00  sec  6.11 MBytes  51.3 Mbits/sec                  
+[  6]  22.00-23.00  sec  6.13 MBytes  51.4 Mbits/sec                  
+[  6]  23.00-24.00  sec  6.10 MBytes  51.2 Mbits/sec                  
+[  6]  24.00-25.00  sec  6.12 MBytes  51.3 Mbits/sec                  
+[  6]  25.00-26.00  sec  6.13 MBytes  51.4 Mbits/sec                  
+[  6]  26.00-27.00  sec  6.27 MBytes  52.6 Mbits/sec                  
+[  6]  27.00-28.00  sec  6.56 MBytes  55.0 Mbits/sec                  
+[  6]  28.00-29.00  sec  6.98 MBytes  58.5 Mbits/sec                  
+[  6]  29.00-30.00  sec  7.45 MBytes  62.5 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bandwidth
+[  6]   0.00-30.00  sec   241 MBytes  67.4 Mbits/sec                  sender
+[  6]   0.00-30.00  sec   241 MBytes  67.3 Mbits/sec                  receiver
+
+iperf Done.

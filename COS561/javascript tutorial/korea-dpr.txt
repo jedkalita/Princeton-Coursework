@@ -1,0 +1,5 @@
+ 1  a10-nat-a.princeton.edu (10.8.0.2)  576.725 ms  1.566 ms  707.653 ms
+ 2  core-87-router.princeton.edu (192.168.9.18)  1.678 ms  1.731 ms  721.586 ms
+ 3  border-87-router.princeton.edu (128.112.12.142)  1.554 ms  1.803 ms  2.424 ms
+ 4  v606.core1.nyc4.he.net (216.66.49.73)  11.473 ms  2.916 ms  2.838 ms
+ 5  * *

@@ -1,0 +1,25 @@
+{
+	"manifest_version": 2,
+	"name": "CountryBlocker",
+	"description": "Analyzes countries visited while loading a page.",
+	"version": "1.0",
+	"permissions": [
+		"storage", "webRequest", "webRequestBlocking", "*://*/*", "activeTab", "notifications"
+	],
+	"icons": { 
+		"128": "img/icon.png" 
+	},
+	"browser_action": {
+		"default_icon": {                    
+			"38": "img/icon.png"          
+		},
+		"default_popup": "popup.html"
+	},
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+	"web_accessible_resources": [
+		"img/icon.png"
+	],
+  	"background": {
+    	"scripts": ["background.js", "cache.js"]
+  	}
+}

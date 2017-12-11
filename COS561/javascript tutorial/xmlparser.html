@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://ip-api.com/xml/141.136.110.186">
+	<body>
+	<script>
+		if (window.XMLHttpRequest) {
+				xmlhttp = new XMLHttpRequest();		
+		}
+		else {
+			xmlhttp = newActiveObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.open("GET", "tempip.xml", false);
+		xmlhttp.send();
+		xmlDoc = xmlhttp.responseXML;
+
+		document.write("table border='1'>");
+		var x = xmlDoc.getElementsByTagName("query");
+		for ( i = 0; i < x.length; i++) {
+			document.write(x[i].getElementsByTagName("country")[0].childnodes[0].nodeValue);
+		}
+		document.write("</table>");
+	</script>
+	</body>
+</html>
+		
