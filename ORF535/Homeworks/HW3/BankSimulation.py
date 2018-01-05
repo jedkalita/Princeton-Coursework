@@ -13,6 +13,7 @@ import scipy as scipy
 import cvxopt as cvxopt
 import matplotlib.pyplot as plt
 import copy
+from numpy.lib.stride_tricks import as_strided
 
 #function to calculate monthly geometric mean of a series
 def geo_mean(iterable):
@@ -50,16 +51,6 @@ for i in range(len(df_AGG) - 1):
     Citi_R.append(R_Citi)
     R_TBill = float((df_TBill[i + 1] + 1) ** (1 / float(12))) #converting from annualized to monthly
     TBill_R.append(R_TBill)
-'''print(len(AGG_R))
-print(AGG_R)
-print(len(SPY_R))
-print(SPY_R)
-print(len(BOA_R))
-print(BOA_R)
-print(len(Citi_R))
-print(Citi_R)
-print(len(TBill_R))
-print(TBill_R)'''
 
 #R's for TBills which would essentially be the returns at the beginning of each period
 R_TBill_beg = list()
@@ -148,6 +139,58 @@ Sortino_Ratio = float((annual_geometric_return_R - risk_free_R) / math.sqrt(down
 print('Sortino Ratio = %f' % Sortino_Ratio)
 
 #Maximum drawdown calculation
+X = pandas.Series(capital_per_month) #pandas series for max drawdown calculation
+#print(X)
+def create_drawdowns(equity_curve):
+    """
+    Calculate the largest peak-to-trough drawdown of the equity curve
+    as well as the duration of the drawdown. Requires that the
+    equity returns is a pandas Series.
+
+    Parameters:
+    equity_curve - A pandas Series representing period net returns.
+
+    Returns:
+    drawdown, duration - Highest peak-to-trough drawdown and duration.
+    """
+
+    # Calculate the cumulative returns curve
+    # and set up the High Water Mark
+    # Then create the drawdown and duration series
+    hwm = [0]
+    eq_idx = equity_curve.index
+    #print(eq_idx)
+    drawdown = pandas.Series(index = eq_idx)
+    duration = pandas.Series(index = eq_idx)
+
+    # Loop over the index range
+    for t in range(1, len(eq_idx)):
+        cur_hwm = max(hwm[t-1], equity_curve[t])
+        hwm.append(cur_hwm)
+        drawdown[t]= hwm[t] - equity_curve[t]
+        duration[t]= 0 if drawdown[t] == 0 else duration[t-1] + 1
+    '''print(drawdown)
+    print(duration)'''
+    return drawdown.max(), duration.max()
+ans = create_drawdowns(X)
+#print(ans)
+MDD = ans[0]
+print('Maximum DrawDown = %f' % MDD)
+
+#VaR at h = 0.01 (1%)
+h = 0.01
+VaR_point = int(h * len(capital_per_month))
+print(capital_per_month)
+print(VaR_point)
+capital_per_month_sorted = np.sort(capital_per_month)
+VaR = capital_per_month_sorted[VaR_point]
+print('VaR = %f' % VaR)
+#CVaR at h = 0.01 (1%)
+CVaR = 0
+for i in range(VaR_point):
+    CVaR = float(CVaR + capital_per_month_sorted[i])
+CVaR = float(CVaR / VaR_point)
+print('CVaR = %f' % CVaR)
 
 
 #Optimization solution for overlay variable 'Y'
