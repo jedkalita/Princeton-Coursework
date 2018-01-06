@@ -49,13 +49,13 @@ for i in range(len(df_AGG) - 1):
     BOA_R.append(R_BOA)
     R_Citi = float((df_Citi[i + 1] - df_Citi[i]) / 100) + 1
     Citi_R.append(R_Citi)
-    R_TBill = float((df_TBill[i + 1] ** (1 / float(12))) + 1) #converting from annualized to monthly
+    R_TBill = float((df_TBill[i + 1] + 1) ** (1 / float(12)))  # converting from annualized to monthly
     TBill_R.append(R_TBill)
 
 #R's for TBills which would essentially be the returns at the beginning of each period
 R_TBill_beg = list()
 for i in range(len(df_TBill)):
-    TBill_beg = float((df_TBill[i] ** (1 / float(12))) + 1)  # converting from annualized to monthly
+    TBill_beg = float((df_TBill[i] + 1) ** (1 / float(12)))  # converting from annualized to monthly
     R_TBill_beg.append(TBill_beg)
 
 capital = 1.3e9 #initial capital (in Billions of $) - this is what we have in January 2004 * returns due to
@@ -124,13 +124,18 @@ print('Number of inverted yields = %d '% inverted_yield)
 annual_geometric_return_R = math.pow(geo_mean(capital_returns_per_month), 12)
 print('Annual geometric return (R) = %f ' % annual_geometric_return_R)
 #annualized volatility of returns
-annual_volatility = math.sqrt(12) * math.pow(np.std(np.array(capital_returns_per_month)), 2)
+annual_volatility = 12 * math.pow(np.std(np.array(capital_returns_per_month)), 2)
 print('Annualized volatility = %f' % annual_volatility)
 #Sharpe Ratio
-all_TBills_R = list()
-val = float((df_TBill[0] + 1) ** (1 / float(12))) #converting from annualized to monthly - for 1st month
+'''all_TBills_R = list()
+val = float((df_TBill[0] ** (1 / float(12))) + 1) #converting from annualized to monthly - for 1st month
+all_TBills_R.append(val)
 for i in range(len(TBill_R)):
-    all_TBills_R.append(TBill_R[i])
+    all_TBills_R.append(TBill_R[i])'''
+all_TBills_R = list()
+for i in range(len(df_TBill)):
+    val = float((df_TBill[i] + 1) ** (1 / float(12))) # converting from annualized to monthly - for each month
+    all_TBills_R.append(val)
 
 risk_free_R = math.pow(geo_mean(all_TBills_R), 12) #the risk free rate is the annualized avg of T-Bills
 print('Risk Free rate of return = %f' % risk_free_R)
@@ -148,7 +153,7 @@ for i in range(N):
         downsides.append(comp)
     else:
         downsides.append(0)
-downside_variance = math.sqrt(12) * math.pow(np.std(np.array(downsides)), 2) #annualized from mothly
+downside_variance = 12 * math.pow(np.std(np.array(downsides)), 2) #annualized from mothly
 print('Annualized downside variance = %f' % downside_variance)
 Sortino_Ratio = float((annual_geometric_return_R - risk_free_R) / math.sqrt(downside_variance))
 print('Sortino Ratio = %f' % Sortino_Ratio)
@@ -207,8 +212,6 @@ for i in range(VaR_point):
 CVaR = float(CVaR / VaR_point)
 print('CVaR = %f' % CVaR)
 
-
-#Optimization solution for overlay variable 'Y'
 
 
 
