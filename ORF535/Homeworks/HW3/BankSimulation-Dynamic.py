@@ -55,7 +55,7 @@ for i in range(len(df_AGG) - 1):
 #R's for TBills which would essentially be the returns at the beginning of each period
 R_TBill_beg = list()
 for i in range(len(df_TBill)):
-    TBill_beg = float((df_TBill[i] ** (1 / float(12))) + 1) #converting from annualized to monthly
+    TBill_beg = float((df_TBill[i] ** (1 / float(12))) + 1)  # converting from annualized to monthly
     R_TBill_beg.append(TBill_beg)
 
 capital = 1.3e9 #initial capital (in Billions of $) - this is what we have in January 2004 * returns due to
@@ -64,7 +64,7 @@ yellow_mark = capital * 0.2
 num_yellow = 0
 num_red = 0
 inverted_yield = 0
-y = 2 #static overlay strategy of investment policy, we start with y = 2
+y = 2 #dynamic overlay strategy of investment policy, we start with y = 2 (for the first period)
 #At every month, y*capital - long on AGG, y*capital - short on 13W TBills, the remaining capital
 # (initial capital) - invest in T-Bills
 #at each month beginning February, we will add the results of long and short and see how the previous
@@ -75,7 +75,6 @@ liabilities_shorted = list() #beginning of each month how much money is shorted
 net_profit_list = list()
 capital_returns_per_month = list() #Total Returns (R) per month -
 # beginning from February 2004 - 167 entries
-diff = float(0.0) #amount to be recapitalized by in the event of a red card
 for i in range(len(R_TBill_beg)):
     if i == 0: #for the very first period it will be just return from T-Bills
         asset = y * capital
@@ -92,27 +91,34 @@ for i in range(len(R_TBill_beg)):
         prev_month_capital = capital
         capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
         R_this_month = float(capital / prev_month_capital) #formula for R
-        if capital < 0: #we will have to recapitalize the bank
+        if capital < 0:
             #print('Red Flag.')
             num_red = int(num_red + 1)
-            diff = float((-1 * capital + 1.3e9))
-
         elif capital < yellow_mark:
             #print('Yellow Flag.')
             num_yellow = int(num_yellow + 1)
-        spread = AGG_R[i - 1] - TBill_R[i - 1]  # the spread
-        if spread < 0:
-            inverted_yield = int(inverted_yield + 1)
         #asset and liability allocation for the next month
+        #we will update our overlay decision variable 'y' based on the interest rate of short vs long
+        #for capital inflow this month - i.e. for month t, (t - 1) month's interests
+        spread = AGG_R[i - 1] - TBill_R[i - 1] #the spread
+        lev_ratio = float(AGG_R[i - 1] / TBill_R[i - 1])
+        if spread < 0: #i.e., an inverted yield - chances are next month too safe bet to short bonds and long TBills
+            #print('Inverted Yield.')
+            inverted_yield = int(inverted_yield + 1)
+            #y = float(lev_ratio / spread)
+            y = float(1.0 - lev_ratio)
+        else:
+            #y = float(lev_ratio / spread)
+            y = 4
         asset = y * capital
         asset_investments.append(asset)
         liability = y * capital
         liabilities_shorted.append(liability)
         capital_per_month.append(capital) #capital for this month
         capital_returns_per_month.append(R_this_month)
-print('Number of red cards = %d ' % num_red)
-print('Number of yellow cards = %d ' % num_yellow)
-print('Number of inverted yields = %d ' % inverted_yield)
+print('Number of red cards = %d '% num_red)
+print('Number of yellow cards = %d '% num_yellow)
+print('Number of inverted yields = %d '% inverted_yield)
 #Calculate reward and risk measures
 #find the geometric returns, monthly then convert to annualized
 annual_geometric_return_R = math.pow(geo_mean(capital_returns_per_month), 12)
