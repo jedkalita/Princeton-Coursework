@@ -49,20 +49,13 @@ for i in range(len(df_TBill)):
     TBill_beg = float((df_TBill[i] + 1) ** (1 / float(12))) #converting from annualized to monthly
     R_TBill_beg.append(TBill_beg)
 
-#capital = 1.3e9 #initial capital (in Billions of $) - this is what we have in January 2004 * returns due to
-#investment in TBills
-#yellow_mark = capital * 0.2
-num_yellow = 0
-num_red = 0
-inverted_yield = 0
-#y = 2 #static overlay strategy of investment policy, we start with y = 2
-#At every month, y*capital - long on AGG, y*capital - short on 13W TBills, the remaining capital
-# (initial capital) - invest in T-Bills
-#at each month beginning February, we will add the results of long and short and see how the previous
-#T-Bill investment paid off - returns of assets - losses due to liabilities
-#capital_per_month1 = list() #the amount of capital available at the beginning of each month
-# beginning from February 2004 - 167 entries
+ys = np.linspace(0.0, 5.0, num=1000, endpoint=True) #grid search spacings - for the sake of practicality,
+#we are considering 0 to 5 with both endpoints included as the range of leverage
+#print(ys)
+#now, since we are performing gridsearch, for each of the ys we will see what happens and pick the best
+#y based on if they fulfill the constraints
 
+#CVaR constraint
 def CVaR_constraint(capital_per_month1):
     h = 0.01  # tolerance level is 1%
     #print(len(capital_per_month1))
@@ -76,10 +69,11 @@ def CVaR_constraint(capital_per_month1):
     CVaR = float(CVaR / VaR_point)
     return CVaR
 
-capital_constraints = []
-
-#define the objective function
-def objective(y):
+y = 0.0 #initialization of the optimization variable
+max_geometric_R = 0.0 #this will be the optimizer
+min_CVaR = 0.0 #best CVaR so far
+for j in range(len(ys)): #basically for each potential y within ys
+    y_i = ys[j]
     capital_per_month = list()  # the amount of capital available at the beginning of each month
     asset_investments = list()  # beginning of each month how much money is invested - long
     liabilities_shorted = list()  # beginning of each month how much money is shorted
@@ -87,60 +81,50 @@ def objective(y):
     capital_returns_per_month = list()  # Total Returns (R) per month -
     capital = 1.3e9  # initial capital (in Billions of $) - this is what we have in January 2004 * returns due to
     for i in range(len(R_TBill_beg)):
-        if i == 0: #for the very first period it will be just return from T-Bills
-            asset = y * capital
+        if i == 0:  # for the very first period it will be just return from T-Bills
+            asset = y_i * capital
             asset_investments.append(asset)
-            liability = y * capital
+            liability = y_i * capital
             liabilities_shorted.append(liability)
             capital = capital * R_TBill_beg[0]
             capital_per_month.append(capital)
-        else: #take in the assets - liabilities from the pervious month which would add to capital flows this month
+            if capital < 0: #in the event of a red flag, immediately go to the next y
+                continue
+        else:  # take in the assets - liabilities from the pervious month which would add to capital flows this month
             assets_returns_prev_year = asset_investments[i - 1] * AGG_R[i - 1]
             liabilities_prev_year = liabilities_shorted[i - 1] * TBill_R[i - 1]
             net_profit = assets_returns_prev_year - liabilities_prev_year
             net_profit_list.append(net_profit)
             prev_month_capital = capital
-            capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
-            R_this_month = float(capital / prev_month_capital) #formula for R
+            capital = (capital + net_profit) * R_TBill_beg[i]  # this is the capital for beginning of a new period
+            R_this_month = float(capital / prev_month_capital)  # formula for R
+            if capital < 0: #in the event of a red flag, immediately go to the next y
+                continue
 
-            #asset and liability allocation for the next month
-            asset = y * capital
+            # asset and liability allocation for the next month
+            asset = y_i * capital
             asset_investments.append(asset)
-            liability = y * capital
+            liability = y_i * capital
             liabilities_shorted.append(liability)
-            capital_per_month.append(capital) #capital for this month
+            capital_per_month.append(capital)  # capital for this month
             capital_returns_per_month.append(R_this_month)
 
-    #now calculate the geometric mean of the capital returns and minimize the -ve of it
+    # now calculate the geometric mean of the capital returns
     annual_geometric_return_R = math.pow(geo_mean(capital_returns_per_month), 12)
-    CVaR = CVaR_constraint(capital_per_month)
+    CVaR = CVaR_constraint(capital_per_month) #CVaR - check if it is <= $200 million
+    #update for decision variable whenever we have a higher return and CVaR constraint is satisfied
+    if (annual_geometric_return_R >= max_geometric_R and CVaR <= 2e8):
+        y = y_i
+        max_geometric_R = annual_geometric_return_R
+        min_CVaR = CVaR
 
 
 
-    cons = []
-    for i in range(len(capital_per_month)):
-        cons.append({'type': 'ineq', 'fun': lambda i: capital_per_month[i] - 0})
-    cons.append({'type': 'ineq', 'fun': CVaR - 2e8})
-    capital_constraints = cons
-
-    #print(capital_per_month)
-    #capital_per_month1 = capital_per_month
-    return -1 * annual_geometric_return_R
-
-cons = capital_constraints
-
-#y = np.zeros(1)
-y = np.random.rand(1)
-bnds = [(0, np.inf)] * 1
-#print(bnds)
-sol = minimize(objective, y.flatten(), method='SLSQP', bounds=bnds, constraints=cons)
-print(sol)
-#print(sol.x)
-
-y = sol.x[0]
-#print(y)
-
-
+#now, our y will store the optimized decision variable. Now we will just conduct the analysis of
+#risk-reward as before
+num_yellow = 0
+num_red = 0
+inverted_yield = 0
 capital = 1.3e9
 yellow_mark = capital * 0.2
 
@@ -190,6 +174,7 @@ for i in range(len(R_TBill_beg)):
     elif capital < yellow_mark:
         # print('Yellow Flag.')
         num_yellow = int(num_yellow + 1)
+
 
 print('Number of red cards = %d ' % num_red)
 print('Number of yellow cards = %d ' % num_yellow)
@@ -289,14 +274,5 @@ for i in range(VaR_point):
     CVaR = float(CVaR + capital_per_month_sorted[i])
 CVaR = float(CVaR / VaR_point)
 print('CVaR = %f' % CVaR)
-
-
-
-
-
-
-
-
-
 
 
