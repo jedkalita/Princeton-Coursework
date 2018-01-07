@@ -52,14 +52,15 @@ for i in range(len(df_BOA)):
         capital = capital * BOA_R[i - 1] #this is the capital for beginning of a new period based on this
         #month's returns
         R_this_month = float(capital / prev_month_capital) #formula for R
-        if capital < 0:
-            #print('Red Flag.')
-            num_red = int(num_red + 1)
-        elif capital < yellow_mark:
-            #print('Yellow Flag.')
-            num_yellow = int(num_yellow + 1)
+
         capital_per_month.append(capital) #capital for this month
         capital_returns_per_month.append(R_this_month) #capital returns from Feb '04 to Dec '17
+    if capital < 0:
+        # print('Red Flag.')
+        num_red = int(num_red + 1)
+    elif capital < yellow_mark:
+        # print('Yellow Flag.')
+        num_yellow = int(num_yellow + 1)
 print('Number of red cards = %d '% num_red)
 print('Number of yellow cards = %d '% num_yellow)
 

@@ -132,6 +132,7 @@ cons = capital_constraints
 #y = np.zeros(1)
 y = np.random.rand(1)
 bnds = [(0, np.inf)] * 1
+#print(bnds)
 sol = minimize(objective, y.flatten(), method='SLSQP', bounds=bnds, constraints=cons)
 print(sol)
 #print(sol.x)
@@ -169,17 +170,7 @@ for i in range(len(R_TBill_beg)):
         prev_month_capital = capital
         capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
         R_this_month = float(capital / prev_month_capital) #formula for R
-        if capital < 0: #we will have to recapitalize the bank
-            #print('Red Flag.')
-            num_red = int(num_red + 1)
-            diff = float((-1 * capital + 1.3e9))
 
-        elif capital < yellow_mark:
-            #print('Yellow Flag.')
-            num_yellow = int(num_yellow + 1)
-        spread = AGG_R[i - 1] - TBill_R[i - 1]  # the spread
-        if spread < 0:
-            inverted_yield = int(inverted_yield + 1)
         #asset and liability allocation for the next month
         asset = y * capital
         asset_investments.append(asset)
@@ -187,6 +178,17 @@ for i in range(len(R_TBill_beg)):
         liabilities_shorted.append(liability)
         capital_per_month.append(capital) #capital for this month
         capital_returns_per_month.append(R_this_month)
+    if capital < 0:  # we will have to recapitalize the bank
+        # print('Red Flag.')
+        num_red = int(num_red + 1)
+        diff = float((-1 * capital + 1.3e9))
+
+    elif capital < yellow_mark:
+        # print('Yellow Flag.')
+        num_yellow = int(num_yellow + 1)
+    spread = AGG_R[i - 1] - TBill_R[i - 1]  # the spread
+    if spread < 0:
+        inverted_yield = int(inverted_yield + 1)
 print('Number of red cards = %d ' % num_red)
 print('Number of yellow cards = %d ' % num_yellow)
 print('Number of inverted yields = %d ' % inverted_yield)

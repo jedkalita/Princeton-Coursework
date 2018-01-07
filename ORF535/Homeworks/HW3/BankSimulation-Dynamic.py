@@ -91,12 +91,7 @@ for i in range(len(R_TBill_beg)):
         prev_month_capital = capital
         capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
         R_this_month = float(capital / prev_month_capital) #formula for R
-        if capital < 0:
-            #print('Red Flag.')
-            num_red = int(num_red + 1)
-        elif capital < yellow_mark:
-            #print('Yellow Flag.')
-            num_yellow = int(num_yellow + 1)
+
         #asset and liability allocation for the next month
         #we will update our overlay decision variable 'y' based on the interest rate of short vs long
         #for capital inflow this month - i.e. for month t, (t - 1) month's interests
@@ -116,6 +111,13 @@ for i in range(len(R_TBill_beg)):
         liabilities_shorted.append(liability)
         capital_per_month.append(capital) #capital for this month
         capital_returns_per_month.append(R_this_month)
+    if capital < 0:
+        # print('Red Flag.')
+        num_red = int(num_red + 1)
+    elif capital < yellow_mark:
+        # print('Yellow Flag.')
+        num_yellow = int(num_yellow + 1)
+
 print('Number of red cards = %d '% num_red)
 print('Number of yellow cards = %d '% num_yellow)
 print('Number of inverted yields = %d '% inverted_yield)
