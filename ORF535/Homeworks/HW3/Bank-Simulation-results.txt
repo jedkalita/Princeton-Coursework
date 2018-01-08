@@ -1,3 +1,6 @@
+Question 2 - Part (a) - Bank Simulation (Static Strategy Decision Variable) - Results
+
+
 Number of red cards = 0 
 Number of yellow cards = 152 
 Number of inverted yields = 134 

@@ -1,3 +1,6 @@
+Question 4 - Part (b) - Citi Analysis - Results
+
+
 Number of red cards = 0 
 Number of yellow cards = 122 
 Annual geometric return (R) = 0.647956 

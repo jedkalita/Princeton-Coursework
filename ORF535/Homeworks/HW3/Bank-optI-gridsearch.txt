@@ -1,3 +1,6 @@
+Question 2 - Part (b) - Bank Simulation (Static Optimization for Decision Variable) - Code
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas

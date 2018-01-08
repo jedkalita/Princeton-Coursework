@@ -1,3 +1,6 @@
+Question 3 - Bank Simulation (Dynamic Strategy Decision Variable) - Code
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas

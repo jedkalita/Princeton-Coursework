@@ -1,3 +1,6 @@
+Question 3 - Bank Simulation (Dynamic Strategy Decision Variable) - Results
+
+
 Number of red cards = 0 
 Number of yellow cards = 0 
 Number of inverted yields = 134 

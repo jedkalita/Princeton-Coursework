@@ -1,3 +1,6 @@
+Question 2 - Part (b) - Bank Simulation (Static Optimization for Decision Variable) - Results
+
+
 Value of optimized decision variable (y) = 1.151151
 Number of red cards = 0 
 Number of yellow cards = 119 

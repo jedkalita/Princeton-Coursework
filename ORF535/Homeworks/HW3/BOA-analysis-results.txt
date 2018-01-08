@@ -1,3 +1,6 @@
+Question 4 - Part (a) - BOA Analysis - Results
+
+
 Number of red cards = 0 
 Number of yellow cards = 0 
 Annual geometric return (R) = 0.997562 

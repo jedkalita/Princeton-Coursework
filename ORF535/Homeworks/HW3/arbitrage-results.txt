@@ -1,3 +1,6 @@
+Question 1 - Arbitrage Spot and Forward - Results
+
+
 indices layout 
 0 - USD, 1 - GBP, 2 - EU, 3 - CNY, 4 - gold, 5 - US Bill
 6 - German Bill, 7 - UK Bill (EU), 8 - Chinese Bill, 9 - SP500

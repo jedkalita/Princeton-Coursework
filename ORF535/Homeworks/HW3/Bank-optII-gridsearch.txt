@@ -1,3 +1,6 @@
+Question 2 - Part (c) - Bank Simulation (Static Optimization for Decision Variable and Weights for 3 Asset Classes) - Code
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas
