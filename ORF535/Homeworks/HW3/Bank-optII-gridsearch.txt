@@ -14,6 +14,16 @@ import cvxopt as cvxopt
 import matplotlib.pyplot as plt
 import copy
 from scipy.optimize import *
+import itertools
+
+def is_sum_one(tup):
+    sum = 0
+    for i in range(len(tup)):
+        sum += tup[i]
+    if sum == 1:
+        return True
+    else:
+        return False
 
 #function to calculate monthly geometric mean of a series
 def geo_mean(iterable):
@@ -49,12 +59,62 @@ for i in range(len(df_TBill)):
     TBill_beg = float((df_TBill[i] + 1) ** (1 / float(12))) #converting from annualized to monthly
     R_TBill_beg.append(TBill_beg)
 
-ys = np.linspace(0.0, 5.0, num=1000, endpoint=True) #grid search spacings - for the sake of practicality,
-#we are considering 0 to 5 with both endpoints included as the range of leverage
+ys = np.linspace(0.0, 5.0, num=100, endpoint=True) #grid search spacings - for the sake of practicality,
 #print(ys)
-#now, since we are performing gridsearch, for each of the ys we will see what happens and pick the best
-#y based on if they fulfill the constraints
 
+#we are considering 0 to 5 with both endpoints included as the range of leverage
+ws = np.linspace(0.1, 1.0, num=10, endpoint = True) #grid search spacings for weights
+#print(ws)
+w1 = list()
+w2 = list()
+w3 = list()
+for i in range(ws.size):
+    w1.append(float(round(ws[i], 2)))
+    w2.append(float(round(ws[i], 2)))
+    w3.append(float(round(ws[i], 2)))
+'''w1.append(1)
+w2.append(2)
+w3.append(3)'''
+
+w = list()
+w.append(w1)
+w.append(w2)
+w.append(w3)
+# print(w)
+d = list(itertools.product(*w))
+
+sum_to_one = list()
+for i in range(len(d)):
+    if (is_sum_one(d[i]) is True):
+        sum_to_one.append(d[i])
+    else:
+        continue
+
+ws2 = list()
+ws2.append(np.array(sum_to_one))
+#print(ws2)
+w_s = np.array(np.array(ws2))
+#print(w_s)
+#print(w_s.shape[1])
+#print(w_s[0][4798])
+#now, just join ys and weights that add to 1
+x = list()
+for i in range(len(ys)):
+    if (ys[i] == 0): #don't take y = 0
+        continue
+    for j in range(w_s.shape[1]): #for each of the 4801 weights that add to 1
+        t = list()
+        t.append(ys[i])
+        for k in range(3): #since 3 assets
+            t.append(w_s[0][j][k])
+        #print(t)
+        x.append(t)
+'''print(len(x))
+print(x[42998])'''
+#print(x)
+
+#now, the list 'x' stores all possible combinations of decision variable for leverage 'y'
+#and weights of each individual asset that add up to 1
 #CVaR constraint
 def CVaR_constraint(capital_per_month1):
     h = 0.01  # tolerance level is 1%
@@ -68,37 +128,79 @@ def CVaR_constraint(capital_per_month1):
     # print(VaR_point)
     CVaR = float(CVaR / VaR_point)
     return CVaR
-
+#NOTE: asset1 - SPY, asset2 - AGG, asset3 - TBill
+#we will iterate through the entire list and check for constraints and optimize for y, w1, w2, w3
 y = 0.0 #initialization of the optimization variable
 max_geometric_R = 0.0 #this will be the optimizer
 min_CVaR = 0.0 #best CVaR so far
-for j in range(len(ys)): #basically for each potential y within ys
-    y_i = ys[j]
+w1_best = 0.0
+w2_best = 0.0
+w3_best = 0.0
+'''print(len(x))
+print(x)
+print(x[0])
+print(x[1])
+print(x[1][0])
+print(x[1][1])
+print(x[1][2])
+print(x[1][3])'''
+#mean = []
+for j in range(len(x)):
+    #print('Iteration number = %d' % j)
+    y_i = x[j][0] #the y value
+    w1_i = x[j][1] #the w1 value
+    w2_i = x[j][2]  # the w2 value
+    w3_i = x[j][3]  # the w3 value
+    '''print('y variable = %f' % y_i)
+    print('w(SPY) = %f' % w1_i)
+    print('w(AGG) = %f' % w2_i)
+    print('w(TBill) = %f' % w3_i)'''
     capital_per_month = list()  # the amount of capital available at the beginning of each month
     asset_investments = list()  # beginning of each month how much money is invested - long
     liabilities_shorted = list()  # beginning of each month how much money is shorted
     net_profit_list = list()
     capital_returns_per_month = list()  # Total Returns (R) per month -
     capital = 1.3e9  # initial capital (in Billions of $) - this is what we have in January 2004 * returns due to
-    for i in range(len(R_TBill_beg)):
-        if i == 0:  # for the very first period it will be just return from T-Bills
+
+    spy_investments = list()
+    agg_investments = list()
+    tbill_investments = list()
+    for i in range(0, len(R_TBill_beg)):
+        # for first time period
+        if i == 0:
             asset = y_i * capital
             asset_investments.append(asset)
             liability = y_i * capital
             liabilities_shorted.append(liability)
-            capital = capital * R_TBill_beg[0]
+            capital = capital * R_TBill_beg[0]  # for first year just focus on TBills
             capital_per_month.append(capital)
-            if capital < 0: #in the event of a red flag, immediately go to the next y
+            spy = capital * w1_i
+            spy_investments.append(spy)
+            agg = capital * w2_i
+            agg_investments.append(agg)
+            tbill = capital * w3_i
+            tbill_investments.append(tbill)
+            if capital <= 0:  # red card
                 continue
-        else:  # take in the assets - liabilities from the pervious month which would add to capital flows this month
+        else:
+            # take in the assets - liabilities from the pervious month which would add to capital flows this month
             assets_returns_prev_year = asset_investments[i - 1] * AGG_R[i - 1]
             liabilities_prev_year = liabilities_shorted[i - 1] * TBill_R[i - 1]
-            net_profit = assets_returns_prev_year - liabilities_prev_year
-            net_profit_list.append(net_profit)
+            lev_profit = assets_returns_prev_year - liabilities_prev_year
+            # returns from each asset this month
+            spy_returns_prev_year = spy_investments[i - 1] * SPY_R[i - 1]
+            agg_returns_prev_year = agg_investments[i - 1] * AGG_R[i - 1]
+            tbill_returns_prev_year = tbill_investments[i - 1] * TBill_R[i - 1]
+            net_profit = lev_profit + spy_returns_prev_year \
+                         + agg_returns_prev_year + tbill_returns_prev_year
+            total_profit = net_profit - capital
+            net_profit_list.append(total_profit)
             prev_month_capital = capital
-            capital = (capital + net_profit) * R_TBill_beg[i]  # this is the capital for beginning of a new period
+
+            # net capital from returns
+            capital = net_profit
             R_this_month = float(capital / prev_month_capital)  # formula for R
-            if capital < 0: #in the event of a red flag, immediately go to the next y
+            if capital <= 0:  # red card
                 continue
 
             # asset and liability allocation for the next month
@@ -106,22 +208,57 @@ for j in range(len(ys)): #basically for each potential y within ys
             asset_investments.append(asset)
             liability = y_i * capital
             liabilities_shorted.append(liability)
+
+            # for each of the invested assets - fixed mix - next month investments
+            spy = capital * w1_i
+            spy_investments.append(spy)
+            agg = capital * w2_i
+            agg_investments.append(agg)
+            tbill = capital * w3_i
+            tbill_investments.append(tbill)
             capital_per_month.append(capital)  # capital for this month
             capital_returns_per_month.append(R_this_month)
 
-    # now calculate the geometric mean of the capital returns
+    # now calculate the geometric mean of the capital returns and minimize the -ve of it
     annual_geometric_return_R = math.pow(geo_mean(capital_returns_per_month), 12)
-    CVaR = CVaR_constraint(capital_per_month) #CVaR - check if it is <= $200 million
-    #update for decision variable whenever we have a higher return and CVaR constraint is satisfied
-    if (annual_geometric_return_R >= max_geometric_R and CVaR <= 2e8):
+    #mean.append(annual_geometric_return_R)
+    CVaR = CVaR_constraint(capital_per_month)
+    '''print('outside if...')
+    print('Annual geomean = %f' % annual_geometric_return_R)
+    print('CVaR = %f' % CVaR)
+    print('y = %f' % y_i)
+    print('W1 = %f' % w1_i)
+    print('W2 = %f' % w2_i)
+    print('W3 = %f' % w3_i)
+    print('Max geo mean so far: %f' % max_geometric_R)'''
+    # update for decision variable whenever we have a higher return and CVaR constraint is satisfied
+    if (annual_geometric_return_R >= max_geometric_R):
         y = y_i
         max_geometric_R = annual_geometric_return_R
         min_CVaR = CVaR
+        w1_best = w1_i
+        w2_best = w2_i
+        w3_best = w3_i
+        '''print('inside if - changing the max geomean..')
+        print('y = %f' % y)
+        print('w1 best = %f' % w1_best)
+        print('w2 best = %f' % w2_best)
+        print('w3 best = %f' % w3_best)
+        print('Max geo mean (changed): %f' % max_geometric_R)
+        print('CVaR (changed): %f' % min_CVaR)'''
 
 
-
-#now, our y will store the optimized decision variable. Now we will just conduct the analysis of
-#risk-reward as before
+'''print('Printing results...')
+print(y)
+print(w1_best)
+print(w2_best)
+print(w3_best)
+print(max_geometric_R)
+print(min_CVaR)'''
+'''print(mean)
+print(np.sort(np.array(mean)))'''
+#now, our y will store the optimized decision variable, and w1, w2, w3 store the optimized weights.
+# Now we will just conduct the analysis of risk-reward as before
 num_yellow = 0
 num_red = 0
 inverted_yield = 0
@@ -129,7 +266,7 @@ capital = 1.3e9
 yellow_mark = capital * 0.2
 
 #At every month, y*capital - long on AGG, y*capital - short on 13W TBills, the remaining capital
-# (initial capital) - invest in T-Bills
+# (initial capital) - invest in SPY, AGG, T-Bills
 #at each month beginning February, we will add the results of long and short and see how the previous
 #T-Bill investment paid off - returns of assets - losses due to liabilities
 capital_per_month = list() #the amount of capital available at the beginning of each month
@@ -138,21 +275,46 @@ liabilities_shorted = list() #beginning of each month how much money is shorted
 net_profit_list = list()
 capital_returns_per_month = list() #Total Returns (R) per month -
 
+spy_investments = list()
+agg_investments = list()
+tbill_investments = list()
+#changing the names of weight variables for clarity
+w_SPY = w1_best
+w_AGG = w2_best
+w_TBill = w3_best
+
 for i in range(len(R_TBill_beg)):
-    if i == 0: #for the very first period it will be just return from T-Bills
+    if i == 0:
+        # for first time period
         asset = y * capital
         asset_investments.append(asset)
         liability = y * capital
         liabilities_shorted.append(liability)
-        capital = capital * R_TBill_beg[0]
+        capital = capital * R_TBill_beg[0]  # for first year just focus on TBills
         capital_per_month.append(capital)
-    else: #take in the assets - liabilities from the pervious month which would add to capital flows this month
+        spy = capital * w_SPY
+        spy_investments.append(spy)
+        agg = capital * w_AGG
+        agg_investments.append(agg)
+        tbill = capital * w_TBill
+        tbill_investments.append(tbill)
+    else:
+        #take in the assets - liabilities from the pervious month which would add to capital flows this month
         assets_returns_prev_year = asset_investments[i - 1] * AGG_R[i - 1]
         liabilities_prev_year = liabilities_shorted[i - 1] * TBill_R[i - 1]
-        net_profit = assets_returns_prev_year - liabilities_prev_year
-        net_profit_list.append(net_profit)
+        lev_profit = assets_returns_prev_year - liabilities_prev_year
+        #returns from each asset this month
+        spy_returns_prev_year = spy_investments[i - 1] * SPY_R[i - 1]
+        agg_returns_prev_year = agg_investments[i - 1] * AGG_R[i - 1]
+        tbill_returns_prev_year = tbill_investments[i - 1] * TBill_R[i - 1]
+        net_profit = lev_profit + spy_returns_prev_year \
+                     + agg_returns_prev_year + tbill_returns_prev_year
+        total_profit = net_profit - capital
+        net_profit_list.append(total_profit)
         prev_month_capital = capital
-        capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
+
+        #net capital from returns
+        capital = net_profit
         R_this_month = float(capital / prev_month_capital) #formula for R
 
         spread = AGG_R[i - 1] - TBill_R[i - 1]  # the spread
@@ -164,6 +326,14 @@ for i in range(len(R_TBill_beg)):
         asset_investments.append(asset)
         liability = y * capital
         liabilities_shorted.append(liability)
+
+        #for each of the invested assets - fixed mix - next month investments
+        spy = capital * w_SPY
+        spy_investments.append(spy)
+        agg = capital * w_AGG
+        agg_investments.append(agg)
+        tbill = capital * w_TBill
+        tbill_investments.append(tbill)
         capital_per_month.append(capital) #capital for this month
         capital_returns_per_month.append(R_this_month)
     if capital < 0:  # we will have to recapitalize the bank
@@ -175,7 +345,12 @@ for i in range(len(R_TBill_beg)):
         # print('Yellow Flag.')
         num_yellow = int(num_yellow + 1)
 
+#print(capital_per_month)
+
 print('Value of optimized decision variable (y) = %f' % y)
+print('Value of optimized weight variable for SP500 = %f' % w1_best)
+print('Value of optimized weight variable for AGG = %f' % w2_best)
+print('Value of optimized weight variable for TBill = %f' % w3_best)
 print('Number of red cards = %d ' % num_red)
 print('Number of yellow cards = %d ' % num_yellow)
 print('Number of inverted yields = %d ' % inverted_yield)
@@ -218,7 +393,7 @@ for i in range(N):
         downsides.append(0)
 downside_variance = 12 * math.pow(np.std(np.array(downsides)), 2) #annualized from mothly
 print('Annualized downside variance = %f' % downside_variance)
-Sortino_Ratio = float((annual_geometric_return_R - risk_free_R) / math.sqrt(downside_variance))
+Sortino_Ratio = np.inf if downside_variance == 0.0 else float((annual_geometric_return_R - risk_free_R) / math.sqrt(downside_variance))
 print('Sortino Ratio = %f' % Sortino_Ratio)
 
 #Maximum drawdown calculation
@@ -274,5 +449,3 @@ for i in range(VaR_point):
     CVaR = float(CVaR + capital_per_month_sorted[i])
 CVaR = float(CVaR / VaR_point)
 print('CVaR = %f' % CVaR)
-
-

@@ -1,0 +1,13 @@
+Value of optimized decision variable (y) = 1.151151
+Number of red cards = 0 
+Number of yellow cards = 119 
+Number of inverted yields = 134 
+Annual geometric return (R) = 0.877546 
+Annualized volatility = 0.005517
+Risk Free rate of return = 1.749596
+Sharpe Ratio = -11.740267
+Annualized downside variance = 0.005466
+Sortino Ratio = -11.795077
+Maximum DrawDown = 1173949859.579548
+VaR = 199172765.912113
+CVaR = 194300775.372668
