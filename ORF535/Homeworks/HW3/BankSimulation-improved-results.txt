@@ -3,7 +3,7 @@ Question 1 - Part (a) - Bank Simulation (Static Strategy Decision Variable with 
 
 Number of red cards = 0 
 Number of yellow cards = 151 
-Number of inverted yields = 134 
+Number of inverted yields = 124 
 Annual geometric return (R) = 0.496933 
 Annualized volatility = 0.125894
 Risk Free rate of return = 1.749596
