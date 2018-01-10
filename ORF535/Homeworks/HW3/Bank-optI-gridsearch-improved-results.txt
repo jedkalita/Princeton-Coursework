@@ -3,14 +3,14 @@ Question 1 - Part (b) - Bank Simulation (Static Optimization for Decision Variab
 
 Value of optimized decision variable (y) = 1.156156
 Number of red cards = 0 
-Number of yellow cards = 124 
-Number of inverted yields = 134 
-Annual geometric return (R) = 0.874713 
-Annualized volatility = 0.005675
+Number of yellow cards = 63 
+Number of inverted yields = 124 
+Annual geometric return (R) = 0.888421 
+Annualized volatility = 0.024155
 Risk Free rate of return = 1.749596
-Sharpe Ratio = -11.613745
-Annualized downside variance = 0.005622
-Sortino Ratio = -11.668530
-Maximum DrawDown = 1181091716.833997
-VaR = 191514128.225129
-CVaR = 186810917.388215
+Sharpe Ratio = -5.541046
+Annualized downside variance = 0.016006
+Sortino Ratio = -6.806980
+Maximum DrawDown = 1179278621.266002
+VaR = 195433413.898147
+CVaR = 195385612.364512

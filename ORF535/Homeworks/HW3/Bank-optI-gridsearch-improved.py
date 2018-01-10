@@ -133,7 +133,7 @@ yellow_mark = capital * 0.2
 #at each month beginning February, we will add the results of long and short and see how the previous
 #T-Bill investment paid off - returns of assets - losses due to liabilities
 capital_per_month = list() #the amount of capital available at the beginning of each month
-asset_investments = list() #beginning of each month how much money is invested - long
+asset_investments_tlt = list() #beginning of each month how much money is invested - long
 liabilities_shorted = list() #beginning of each month how much money is shorted
 net_profit_list = list()
 capital_returns_per_month = list() #Total Returns (R) per month -
@@ -141,13 +141,13 @@ capital_returns_per_month = list() #Total Returns (R) per month -
 for i in range(len(R_TBill_beg)):
     if i == 0: #for the very first period it will be just return from T-Bills
         asset = y * capital
-        asset_investments.append(asset)
+        asset_investments_tlt.append(asset)
         liability = y * capital
         liabilities_shorted.append(liability)
         capital = capital * R_TBill_beg[0]
         capital_per_month.append(capital)
     else: #take in the assets - liabilities from the pervious month which would add to capital flows this month
-        assets_returns_prev_year = asset_investments[i - 1] * AGG_R[i - 1]
+        assets_returns_prev_year = asset_investments_tlt[i - 1] * TLT_R[i - 1]
         liabilities_prev_year = liabilities_shorted[i - 1] * TBill_R[i - 1]
         net_profit = assets_returns_prev_year - liabilities_prev_year
         net_profit_list.append(net_profit)
@@ -155,13 +155,13 @@ for i in range(len(R_TBill_beg)):
         capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
         R_this_month = float(capital / prev_month_capital) #formula for R
 
-        spread = AGG_R[i - 1] - TBill_R[i - 1]  # the spread
+        spread = TLT_R[i - 1] - TBill_R[i - 1]  # the spread
         if spread < 0:
             inverted_yield = int(inverted_yield + 1)
 
         #asset and liability allocation for the next month
         asset = y * capital
-        asset_investments.append(asset)
+        asset_investments_tlt.append(asset)
         liability = y * capital
         liabilities_shorted.append(liability)
         capital_per_month.append(capital) #capital for this month
