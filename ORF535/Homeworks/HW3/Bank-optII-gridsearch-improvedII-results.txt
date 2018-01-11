@@ -1,0 +1,19 @@
+Question 1 - Part (c) - Bank Simulation (Static Optimization for Decision Variable and Weights for 3 Asset Classes for TLT) - Results
+
+
+Value of optimized decision variable (y) = 0.050505
+Value of optimized weight variable for SP500 = 0.100000
+Value of optimized weight variable for AGG = 0.100000
+Value of optimized weight variable for TBill = 0.800000
+Number of red cards = 0 
+Number of yellow cards = 0 
+Number of inverted yields = 134 
+Annual geometric return (R) = 1.555360 
+Annualized volatility = 0.021274
+Risk Free rate of return = 1.749596
+Sharpe Ratio = -1.331700
+Annualized downside variance = 0.004787
+Sortino Ratio = -2.807358
+Maximum DrawDown = 4048618922.568420
+VaR = 1431918291.274914
+CVaR = 1371246808.793591
