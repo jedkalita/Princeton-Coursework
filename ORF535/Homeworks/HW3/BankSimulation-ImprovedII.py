@@ -89,7 +89,7 @@ for i in range(len(R_TBill_beg)):
         prev_month_capital = capital
         capital = (capital + net_profit) * R_TBill_beg[i] #this is the capital for beginning of a new period
         R_this_month = float(capital / prev_month_capital) #formula for R
-        spread = TLT_R[i - 1] - TBill_R[i - 1]  # the spread
+        spread = spread = (AGG_R[i - 1] + TLT_R[i - 1]) - TBill_R[i - 1] #the spread
         if spread < 0:
             inverted_yield = int(inverted_yield + 1)
         #asset and liability allocation for the next month
