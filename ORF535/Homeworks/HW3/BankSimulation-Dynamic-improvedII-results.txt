@@ -1,0 +1,15 @@
+Question 1 - Bank Simulation (Dynamic Strategy Decision Variable with TLT) - Results
+
+
+Number of red cards = 16 
+Number of yellow cards = 148 
+Number of inverted yields = 0 
+Annual geometric return (R) = 0.001252 
+Annualized volatility = 2.958254
+Risk Free rate of return = 1.749596
+Sharpe Ratio = -1.016504
+Annualized downside variance = 2.525512
+Sortino Ratio = -1.100151
+Maximum DrawDown = 1315078055.580083
+VaR = -0.000884
+CVaR = -0.013435
