@@ -1,0 +1,10 @@
+Monthly geometric return (R) = 1.004073 
+Annual geometric return (R) = 1.049986 
+Annualized volatility = 0.008953
+Risk Free rate of return = 1.749596
+Sharpe Ratio = -7.393667
+Annualized downside variance = 0.007850
+Sortino Ratio = -7.896027
+Maximum DrawDown = 1043206307.043322
+VaR = 1308405579.084720
+CVaR = 1303085661.234046
