@@ -1,0 +1,16 @@
+Value of optimized decision variable (y) = 0.050505
+Value of optimized weight variable for SP500 = 0.100000
+Value of optimized weight variable for AGG = 0.100000
+Value of optimized weight variable for TBill = 0.800000
+Number of red cards = 0 
+Number of yellow cards = 0 
+Number of inverted yields = 0 
+Annual geometric return (R) = 1.517602 
+Annualized volatility = 0.018482
+Risk Free rate of return = 1.749596
+Sharpe Ratio = -1.706480
+Annualized downside variance = 0.004742
+Sortino Ratio = -3.368848
+Maximum DrawDown = 3138075755.616119
+VaR = 1428973344.227493
+CVaR = 1371246808.793591
