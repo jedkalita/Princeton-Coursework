@@ -99,7 +99,7 @@ for i in range(len(R_TBill_beg)):
             y = float(1.0 - lev_ratio)
         else:
             #y = float(lev_ratio / spread)
-            y = 1
+            y = 1.5
         asset = y * capital
         asset_investments.append(asset)
         asset_investments_rnr.append(asset)
