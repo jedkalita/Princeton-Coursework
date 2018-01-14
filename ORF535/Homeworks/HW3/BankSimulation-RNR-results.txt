@@ -1,0 +1,12 @@
+Number of red cards = 0 
+Number of yellow cards = 152 
+Number of inverted yields = 0 
+Annual geometric return (R) = 0.484972 
+Annualized volatility = 0.073105
+Risk Free rate of return = 1.749596
+Sharpe Ratio = -4.677208
+Annualized downside variance = 0.072334
+Sortino Ratio = -4.702084
+Maximum DrawDown = 1304947205.995609
+VaR = 62385.518660
+CVaR = 57987.623545
