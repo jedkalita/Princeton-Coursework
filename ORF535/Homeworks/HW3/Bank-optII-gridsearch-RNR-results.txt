@@ -1,3 +1,5 @@
+Question 2 - Part (c) - Bank Simulation (Static Optimization for Decision Variable and Weights for 3 Asset Classes for TLT adding AGG with RNR) - Results
+
 Value of optimized decision variable (y) = 0.050505
 Value of optimized weight variable for SP500 = 0.100000
 Value of optimized weight variable for AGG = 0.100000

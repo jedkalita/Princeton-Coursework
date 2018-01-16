@@ -1,3 +1,5 @@
+Question 2 - Part (d) - Bank Simulation (Dynamic Strategy Decision Variable adding AGG with RNR) - Results
+
 Number of red cards = 0 
 Number of yellow cards = 158 
 Number of inverted yields = 0 

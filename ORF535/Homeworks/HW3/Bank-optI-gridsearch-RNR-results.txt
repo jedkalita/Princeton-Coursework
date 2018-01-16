@@ -1,3 +1,6 @@
+Question 2 - Part (b) - Bank Simulation (Static Optimization for Decision Variable adding AGG with RNR) - Results
+
+
 Value of optimized decision variable (y) = 0.570571
 Number of red cards = 0 
 Number of yellow cards = 59 

@@ -1,4 +1,4 @@
-Question 1 - Part (b) - Bank Simulation (Static Optimization for Decision Variable with TLT) - Results
+Question 1 - Part (b) - Bank Simulation (Static Optimization for Decision Variable adding AGG with TLT) - Results
 
 
 Value of optimized decision variable (y) = 0.580581

@@ -1,9 +1,9 @@
-Question 1 - Part (a) - Bank Simulation (Static Strategy Decision Variable with TLT) - Results
+Question 1 - Part (a) - Bank Simulation (Static Strategy Decision Variable adding AGG with TLT) - Results
 
 
 Number of red cards = 0 
 Number of yellow cards = 151 
-Number of inverted yields = 124 
+Number of inverted yields = 0 
 Annual geometric return (R) = 0.495467 
 Annualized volatility = 0.087905
 Risk Free rate of return = 1.749596

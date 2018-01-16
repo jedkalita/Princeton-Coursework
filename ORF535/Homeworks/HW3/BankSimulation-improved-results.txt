@@ -1,4 +1,4 @@
-Question 1 - Part (a) - Bank Simulation (Static Strategy Decision Variable with TLT) - Results
+Question 1 - Part (a) - Bank Simulation (Static Strategy Decision Variable replacing AGG with TLT) - Results
 
 
 Number of red cards = 0 

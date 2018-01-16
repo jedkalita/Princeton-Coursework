@@ -1,4 +1,4 @@
-Question 1 - Part (c) - Bank Simulation (Static Optimization for Decision Variable and Weights for 3 Asset Classes for TLT) - Results
+Question 1 - Part (c) - Bank Simulation (Static Optimization for Decision Variable and Weights for 3 Asset Classes for TLT - replacing AGG with TLT) - Results
 
 
 Value of optimized decision variable (y) = 0.050505
