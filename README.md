@@ -1,7 +1,7 @@
 # Princeton-Coursework
 Course ID -> Course Name
 
-COS516 -> Automatic Reasoning about Software (code in C++)
+COS516 -> Automated Reasoning about Software (code in C++)
 
 COS511 -> Theoretical Machine Learning (homeworks and my solutions)
 
